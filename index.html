@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Уведомление об оплате</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f5f0e9;
+      color: #140c36;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      font-size: 1.2em;
+    }
+    header {
+      background-color: #1d1346;
+      color: white;
+      padding: 1em;
+      font-weight: bold;
+    }
+    .container {
+      padding: 2em 1em;
+      flex: 1;
+    }
+    .sbp-logo {
+      width: 170px;
+      margin-bottom: 1em;
+    }
+    .main-amount {
+      font-size: 2.5em;
+      font-weight: bold;
+      margin: 0.3em 0;
+    }
+    .bus-number {
+      font-weight: bold;
+      font-size: 1em;
+      margin: 1em 0 0.3em;
+    }
+    .timestamp {
+      margin-top: 0.5em;
+      font-size: 0.9em;
+    }
+    .tc {
+      color: #ccc;
+      font-size: 0.9em;
+    }
+    .elapsed {
+      margin-top: 2em;
+      font-size: 1em;
+    }
+    .elapsed-time {
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+    .qr-section {
+      margin-top: 2em;
+    }
+    .qr-code {
+      width: 400px;
+      height: 400px;
+      margin: 1em auto;
+    }
+    .ticket {
+      padding: 2em 1em;
+      background-color: #f5f0e9;
+    }
+    .ticket-info {
+      margin-bottom: 1.5em;
+      font-size: 1em;
+    }
+    .ticket-info b {
+      font-weight: bold;
+    }
+    .download-button {
+      background-color: #7ac142;
+      color: white;
+      border: none;
+      padding: 1em;
+      font-size: 1.2em;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      max-width: 400px;
+    }
+  </style>
+  <script>
+    let startTime = Date.now();
+    function updateTimer() {
+      let elapsed = Math.floor((Date.now() - startTime) / 1000);
+      let minutes = String(Math.floor(elapsed / 60)).padStart(2, '0');
+      let seconds = String(elapsed % 60).padStart(2, '0');
+      document.querySelector('.elapsed-time').textContent = `${minutes}:${seconds}`;
+    }
+    window.onload = function() {
+      updateTimer();
+      setInterval(updateTimer, 1000);
+
+      const params = new URLSearchParams(window.location.search);
+      const bus = params.get('bus') || '–';
+      const date = params.get('date') || '';
+      document.getElementById('bus-number').textContent = `Автобус: №${bus}`;
+      document.getElementById('date-time').textContent = date;
+    }
+  </script>
+</head>
+<body>
+  <header>Уведомление об оплате</header>
+  <div class="container">
+    <img src="https://i.postimg.cc/FHmxTZzH/image.png" class="sbp-logo" alt="сбп">
+    <div>Ваш проезд успешно оплачен!</div>
+    <div class="bus-number" id="bus-number">Автобус: №</div>
+    <div class="main-amount">37 ₽</div>
+    <div class="timestamp" id="date-time"></div>
+    <div class="tc">T/C: 8128</div>
+    <div class="elapsed">
+      С момента оплаты прошло:<br>
+      <span class="elapsed-time">00:00</span>
+    </div>
+
+    <div class="qr-section">
+      <img src="https://i.postimg.cc/j5V2h8q8/image.png" class="qr-code" alt="QR-код">
+    </div>
+  </div>
+
+  <div class="ticket">
+    <div class="ticket-info">
+      <b>QR203873000006</b><br>
+      Номер билета: <b>20250626142002986</b>
+    </div>
+    <div class="ticket-info">
+      Предъявите контролеру QR-код.<br>
+      Чтобы сохранить реквизиты билета,<br>
+      нажмите кнопку «Скачать»
+    </div>
+    <button class="download-button">Скачать билет</button>
+  </div>
+</body>
+</html>
