@@ -105,34 +105,35 @@
       document.getElementById('bus-number').textContent = `Автобус: №${bus}`;
       document.getElementById('date-time').textContent = date;
     }
-      const params = new URLSearchParams(window.location.search);
-  const bus = params.get('bus') || '-';
-  const date = params.get('date') || '';
-  const ticketKey = `${date}_${bus}`;
+const params = new URLSearchParams(window.location.search);
+const bus = params.get('bus') || '—';
+const date = params.get('date') || '';
+const tc = params.get('tc') || '';
 
-  // Вставляем данные на страницу
-  window.onload = function () {
-    document.getElementById('bus-number').textContent = `Автобус: №${bus}`;
-    document.getElementById('date-time').textContent = date;
+window.onload = function () {
+  document.getElementById('bus-number').textContent = `Автобус: №${bus}`;
+  document.getElementById('date-time').textContent = date;
+  document.getElementById('tc-value').textContent = `T/C: ${tc}`;
 
-    const stored = JSON.parse(localStorage.getItem('ticketTimer')) || {};
-    if (!stored[ticketKey]) {
-      stored[ticketKey] = Date.now(); // сохраняем стартовое время
-      localStorage.setItem('ticketTimer', JSON.stringify(stored));
-    }
-
-    let startTime = stored[ticketKey];
-
-    function updateTimer() {
-      let elapsed = Math.floor((Date.now() - startTime) / 1000);
-      let minutes = String(Math.floor(elapsed / 60)).padStart(2, '0');
-      let seconds = String(elapsed % 60).padStart(2, '0');
-      document.querySelector('.elapsed-time').textContent = `${minutes}:${seconds}`;
-    }
-
-    updateTimer();
-    setInterval(updateTimer, 1000);
+  // Таймер запускаем
+  let stored = JSON.parse(localStorage.getItem('ticketTimer')) || {};
+  const ticketKey = `${date}_${bus}_${tc}`;
+  if (!stored[ticketKey]) {
+    stored[ticketKey] = Date.now();
+    localStorage.setItem('ticketTimer', JSON.stringify(stored));
   }
+  let startTime = stored[ticketKey];
+
+  function updateTimer() {
+    let elapsed = Math.floor((Date.now() - startTime) / 1000);
+    let minutes = String(Math.floor(elapsed / 60)).padStart(2, '0');
+    let seconds = String(elapsed % 60).padStart(2, '0');
+    document.querySelector('.elapsed-time').textContent = `${minutes}:${seconds}`;
+  }
+
+  updateTimer();
+  setInterval(updateTimer, 1000);
+};
   </script>
 </head>
 <body>
@@ -143,7 +144,7 @@
     <div class="bus-number" id="bus-number">Автобус: №</div>
     <div class="main-amount">37 ₽</div>
     <div class="timestamp" id="date-time"></div>
-    <div class="tc">T/C: 8128</div>
+    <div class="tc" id="tc-value"></div>
     <div class="elapsed">
       С момента оплаты прошло:<br>
       <span class="elapsed-time">00:00</span>
